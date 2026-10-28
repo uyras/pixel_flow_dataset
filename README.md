@@ -31,7 +31,7 @@ Edit [dataset_settings.json](dataset_settings.json) to set:
 - `seed`: random seed for reproducible generation.
 - `output`: output directory, relative to the settings file.
 
-The predefined masks include empty and full masks, each diagonal and both diagonals, and their inverses. Other case parameters come from [base_case/parameters.json](base_case/parameters.json).
+The predefined masks include empty and full masks, each diagonal and both diagonals, and their inverses. Empty and full cases are generated only for the first `L` and their names omit `L`; the manifest records the size used. Other case parameters come from [base_case/parameters.json](base_case/parameters.json).
 
 Run from the project root with Python 3.9 or newer:
 
@@ -50,3 +50,6 @@ To submit one Slurm job per case, set `slurm.enabled` to `true` in [dataset_sett
 Use `--config`, `--output`, `--random-count`, or `--seed` to select another settings file or override individual settings. See [the base case documentation](base_case/README_RU.md) for details of the simulation.
 
 To clean every case in the configured output directory, run `./Allclean` from the project root. You can instead specify a directory with `./Allclean /path/to/cases`. The script runs `Allclean` in each immediate subdirectory, continues after errors, and exits with a nonzero status if any case could not be cleaned.
+# Case status
+
+Run `python3 case_status.py` for a quick summary, or pass a case directory as an argument. Add `--details` to list individual cases. A case is complete when both `converged` and `only_one_result_time` in `run_status.json` are true, matching `Allrun`. Without a final status, the script reports the latest available log or the absence of logs; a log does not prove that a process is running. Errors are checked only at the end of the latest log. The script does not query Slurm or modify cases.

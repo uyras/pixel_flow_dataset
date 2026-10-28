@@ -104,8 +104,12 @@ def main():
         rows = []
         for size, variants in all_masks.items():
             for name, mask in variants:
+                uniform = name in ('empty', 'full')
+                if uniform and size != settings['L'][0]:
+                    continue
                 for speed in settings['U_in']:
-                    case_name = f'L{size}_{name}_U{speed}'
+                    case_name = (f'{name}_U{speed}' if uniform else
+                                 f'L{size}_{name}_U{speed}')
                     case = output / case_name
                     case.mkdir()
                     for filename in ('Allrun', 'Allclean'):
