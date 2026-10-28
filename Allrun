@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""Запустить Allrun в непосредственных подпапках каталога датасета."""
+import argparse
+import json
+import os
+from pathlib import Path
+import shlex
+import subprocess
+import sys
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('cases', nargs='?', type=Path,
+                        help='каталог кейсов (по умолчанию output из dataset_settings.json)')
+    parser.add_argument('--mode', choices=('local', 'slurm'),
+                        help='переопределить режим из настроек')
+    args = parser.parse_args()
+    settings_path = Path(__file__).resolve().parent / 'dataset_settings.json'
+    try:
+        settings = json.loads(settings_path.read_text(encoding='utf-8'))
+        slurm = settings.get('slurm', {})
+        if not isinstance(slurm, dict) or type(slurm.get('enabled', False)) is not bool:
+            raise ValueError('slurm должен быть объектом, а slurm.enabled — логическим значением')
+        mode = args.mode or ('slurm' if slurm.get('enabled', False) else 'local')
+        if args.cases is None:
+            output = settings['output']
+            if not isinstance(output, str) or not output.strip():
+                raise ValueError('output должен быть непустой строкой')
+            cases = settings_path.parent / output
+        else:
+            cases = args.cases
+        cases = cases.resolve()
+        if not cases.is_dir():
+            raise ValueError(f'каталог кейсов не найден: {cases}')
+        options = []
+        if mode == 'slurm':
+            for key, flag in (('partition', '--partition'), ('account', '--account'),
+                              ('time', '--time'), ('memory', '--mem')):
+                value = slurm.get(key, '')
+                if not isinstance(value, str) or '\n' in value or '\r' in value:
+                    raise ValueError(f'slurm.{key} должен быть строкой без переводов строки')
+                if value:
+                    options.append(f'{flag}={value}')
+        directories = sorted(path for path in cases.iterdir() if path.is_dir())
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        print(f'Ошибка: {exc}', file=sys.stderr)
+        return 1
+
+    print(f'Каталог: {cases}; режим: {mode}', flush=True)
+    failures = 0
+    skipped = 0
+    for case in directories:
+        script = case / 'Allrun'
+        print(f'Кейс: {case.name}', flush=True)
+        try:
+            status_path = case / 'run_status.json'
+            if status_path.exists():
+                status = json.loads(status_path.read_text(encoding='utf-8'))
+                if (not isinstance(status, dict) or
+                        type(status.get('converged')) is not bool or
+                        type(status.get('only_one_result_time')) is not bool):
+                    raise ValueError(f'некорректный статус: {status_path}')
+                if status['converged'] and status['only_one_result_time']:
+                    print('Расчёт завершён, пропущен', flush=True)
+                    skipped += 1
+                    continue
+            if not script.is_file() or not os.access(script, os.X_OK):
+                raise OSError(f'скрипт отсутствует или не является исполняемым: {script}')
+            if mode == 'slurm':
+                command = ['sbatch', '--ntasks=1', '--cpus-per-task=1',
+                           f'--chdir={case}', '--output=slurm-%j.out',
+                           '--error=slurm-%j.err', *options,
+                           f'--wrap=exec {shlex.quote(str(script))}']
+            else:
+                command = [str(script)]
+            result = subprocess.run(command, cwd=case, check=False)
+            if result.returncode:
+                print(f'Ошибка {case}: код {result.returncode}', file=sys.stderr)
+                failures += 1
+        except (OSError, ValueError) as exc:
+            print(f'Ошибка запуска {case}: {exc}', file=sys.stderr)
+            failures += 1
+    print(f'Успешно: {len(directories) - failures - skipped}, '
+          f'пропущено: {skipped}, ошибок: {failures}', flush=True)
+    return int(failures > 0)
+
+
+if __name__ == '__main__':
+    sys.exit(main())

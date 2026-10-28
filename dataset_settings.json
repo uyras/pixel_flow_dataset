@@ -1,0 +1,14 @@
+{
+  "L": [4],
+  "U_in": [1],
+  "random_count": 2,
+  "seed": 42,
+  "output": "cases",
+  "slurm": {
+    "enabled": false,
+    "partition": "",
+    "account": "",
+    "time": "10:00:00",
+    "memory": "2G"
+  }
+}

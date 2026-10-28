@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""Запустить Allclean во всех подпапках каталога датасета."""
+import argparse
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+
+def main():
+    started = time.monotonic()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('cases', nargs='?', type=Path,
+                        help='каталог кейсов (по умолчанию output из dataset_settings.json)')
+    args = parser.parse_args()
+    settings_path = Path(__file__).resolve().parent / 'dataset_settings.json'
+    try:
+        if args.cases is None:
+            settings = json.loads(settings_path.read_text(encoding='utf-8'))
+            output = settings['output']
+            if not isinstance(output, str) or not output.strip():
+                raise ValueError('output должен быть непустой строкой')
+            cases = settings_path.parent / output
+        else:
+            cases = args.cases
+        cases = cases.resolve()
+        if not cases.is_dir():
+            raise ValueError(f'каталог кейсов не найден: {cases}')
+        directories = sorted(path for path in cases.iterdir() if path.is_dir())
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        print(f'Ошибка: {exc}', file=sys.stderr)
+        return 1
+
+    print(f'Очистка каталога: {cases}', flush=True)
+    failures = 0
+    for case in directories:
+        print(f'Кейс: {case.name}', flush=True)
+        script = case / 'Allclean'
+        try:
+            result = subprocess.run([str(script)], cwd=case, check=False)
+            if result.returncode:
+                print(f'Ошибка очистки {case}: код {result.returncode}', file=sys.stderr)
+                failures += 1
+        except OSError as exc:
+            print(f'Ошибка запуска {script}: {exc}', file=sys.stderr)
+            failures += 1
+    elapsed = time.monotonic() - started
+    print(f'Успешно: {len(directories) - failures}, ошибок: {failures}, '
+          f'время: {elapsed:.2f} с')
+    return int(failures > 0)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
