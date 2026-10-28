@@ -1,0 +1,18 @@
+{
+  "L": 5,
+  "U_in": 100.0,
+  "rho": 1,
+  "nu": 2,
+  "cells_per_meter": 60,
+  "resolution_policy": "strict",
+  "max_iterations": 20000,
+  "p_residual": 0.00001,
+  "U_residual": 0.000001,
+  "solid_mask": [
+    [0, 0, 0, 0, 1],
+    [1, 0, 0, 0, 0],
+    [1, 1, 0, 0, 0],
+    [1, 1, 1, 0, 0],
+    [1, 1, 1, 1, 0]
+  ]
+}

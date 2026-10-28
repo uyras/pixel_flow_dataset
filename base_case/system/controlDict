@@ -1,0 +1,26 @@
+// Generated for OpenFOAM Foundation 14. Edit parameters.json, then regenerate.
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    location "system";
+    object controlDict;
+}
+
+application foamRun;
+solver incompressibleFluid;
+startFrom startTime;
+startTime 0;
+stopAt endTime;
+endTime 20000;
+deltaT 1;
+writeControl timeStep;
+writeInterval 20000;
+purgeWrite 0;
+writeFormat ascii;
+writePrecision 12;
+writeCompression off;
+timeFormat general;
+timePrecision 12;
+runTimeModifiable false;

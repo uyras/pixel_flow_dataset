@@ -1,0 +1,22 @@
+{
+  "converged": true,
+  "solver_reported_convergence": true,
+  "last_iteration": 1939.0,
+  "last_time_label": "1939s",
+  "solver_finished": true,
+  "initial_residuals": {
+    "Ux": 5.94540403575e-07,
+    "Uy": 9.99559264983e-07,
+    "p": 6.0070982442e-08
+  },
+  "thresholds": {
+    "p": 1e-05,
+    "U": 1e-06
+  },
+  "saved_result_times": [
+    "1939"
+  ],
+  "only_one_result_time": true,
+  "final_fields_saved": true,
+  "fatal_error": false
+}

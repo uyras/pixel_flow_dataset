@@ -1,0 +1,85 @@
+{
+  "parameters": {
+    "L": 5,
+    "U_in": 100.0,
+    "rho": 1,
+    "nu": 2,
+    "cells_per_meter": 60,
+    "resolution_policy": "strict",
+    "max_iterations": 20000,
+    "p_residual": 1e-05,
+    "U_residual": 1e-06,
+    "solid_mask": [
+      [
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        1,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        0
+      ]
+    ],
+    "effective_cells_per_meter": 60
+  },
+  "bounds": {
+    "x": [
+      -1,
+      3
+    ],
+    "y": [
+      -1,
+      1
+    ],
+    "z": [
+      0,
+      0.01
+    ]
+  },
+  "blocks": 38,
+  "cells": 27216,
+  "fluid_regions": 1,
+  "closed_cavities": 0,
+  "solid_area_m2": 0.44,
+  "dx_m": 0.016666666666666666,
+  "Re_1m": 50.0,
+  "pressure_Pa_per_field_unit": 1,
+  "generated_files": [
+    "0/U",
+    "0/p",
+    "channel.foam",
+    "constant/momentumTransport",
+    "constant/physicalProperties",
+    "geometry.svg",
+    "system/blockMeshDict",
+    "system/controlDict",
+    "system/fvSchemes",
+    "system/fvSolution"
+  ]
+}

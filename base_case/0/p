@@ -1,0 +1,40 @@
+// Generated for OpenFOAM Foundation 14. Edit parameters.json, then regenerate.
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class volScalarField;
+    location "0";
+    object p;
+}
+
+dimensions [0 2 -2 0 0 0 0];
+internalField uniform 0;
+boundaryField
+{
+    inlet
+    {
+        type zeroGradient;
+    }
+    outlet
+    {
+        type fixedValue;
+        value uniform 0;
+    }
+    lowerWall
+    {
+        type zeroGradient;
+    }
+    upperWall
+    {
+        type zeroGradient;
+    }
+    body
+    {
+        type zeroGradient;
+    }
+    frontAndBack
+    {
+        type empty;
+    }
+}

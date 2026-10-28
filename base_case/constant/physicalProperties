@@ -1,0 +1,14 @@
+// Generated for OpenFOAM Foundation 14. Edit parameters.json, then regenerate.
+FoamFile
+{
+    version 2.0;
+    format ascii;
+    class dictionary;
+    location "constant";
+    object physicalProperties;
+}
+
+viscosityModel constant;
+nu [0 2 -1 0 0 0 0] 2;
+// Constant density for dimensional pressure conversion; not used by the incompressible solver.
+rho [1 -3 0 0 0 0 0] 1;
