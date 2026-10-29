@@ -38,6 +38,8 @@ Edit [dataset_settings.json](dataset_settings.json) to set:
 - `random_count`: number of unique random masks per `L`, in addition to the predefined masks.
 - `seed`: random seed for reproducible generation.
 - `output`: output directory, relative to the settings file.
+- `solid_mask`, `cells_per_meter`, `p_residual`, `U_residual`, `L`, `rho`, `nu` — parameters from the case;
+- `blocks`, `cells`, `fluid_regions`, `closed_cavities`, `solid_area_m2`, `Re_1m` — analytic parameters from the case.
 
 The predefined masks include empty and full masks, each diagonal and both diagonals, and their inverses. Empty and full cases are generated only for the first `L` and their names omit `L`; the manifest records the size used. Other case parameters come from [base_case/parameters.json](base_case/parameters.json).
 

@@ -81,6 +81,8 @@ python3 collect_dataset.py --output results.npz --append
 - `mesh` — ключ массива центров ячеек;
 - `time` — метка времени результата;
 - `U_in` — максимальная скорость на входе.
+- `solid_mask`, `cells_per_meter`, `p_residual`, `U_residual`, `L`, `rho`, `nu` — параметры из сводки кейса;
+- `blocks`, `cells`, `fluid_regions`, `closed_cavities`, `solid_area_m2`, `Re_1m` — показатели из сводки кейса.
 
 Массивы полей и центров ячеек имеют тип `float64`:
 

@@ -17,6 +17,20 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent
 NUMBER = r'[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?'
+PARAMETERS = ('solid_mask', 'cells_per_meter', 'p_residual', 'U_residual',
+              'L', 'U_in', 'rho', 'nu')
+SUMMARY_FIELDS = ('blocks', 'cells', 'fluid_regions', 'closed_cavities',
+                  'solid_area_m2', 'Re_1m')
+
+
+def read_case_summary(case):
+    summary = json.loads((case / 'case_summary.json').read_text(encoding='utf-8'))
+    values = {key: summary['parameters'][key] for key in PARAMETERS}
+    values.update({key: summary[key] for key in SUMMARY_FIELDS})
+    speed = values['U_in']
+    if type(speed) not in (float, int) or not math.isfinite(speed):
+        raise ValueError('некорректный U_in')
+    return values
 
 
 def clean(text):
@@ -134,11 +148,7 @@ def collect(case, time):
     pressure = field_values(p_text, 'internalField', 1, cells)
     velocity = field_values(u_text, 'internalField', 3, cells)
     inlet_u = field_values(block(block(u_text, 'boundaryField'), 'inlet'), 'value', 3, inlet_count)
-    params = json.loads((case / 'case_summary.json').read_text(encoding='utf-8'))['parameters']
-    speed = params['U_in']
-    if type(speed) not in (float, int) or not math.isfinite(speed):
-        raise ValueError('некорректный U_in')
-    return cells, centers, pressure, velocity, inlet_u, speed
+    return cells, centers, pressure, velocity, inlet_u
 
 
 def main():
@@ -182,7 +192,8 @@ def main():
                 if not (status['converged'] and status['only_one_result_time']):
                     continue
                 time = result_time(case)
-                cells, centers, pressure, velocity, inlet_u, speed = collect(case, time)
+                summary = read_case_summary(case)
+                cells, centers, pressure, velocity, inlet_u = collect(case, time)
                 centers = np.asarray(centers, dtype='<f8').reshape(cells, 3)
                 mesh_key = 'meshes/' + hashlib.sha256(centers.tobytes()).hexdigest()
                 case_key = f'cases/{len(metadata["cases"]):08d}'
@@ -197,7 +208,7 @@ def main():
             arrays[case_key + '/U'] = u_data
             arrays[case_key + '/inlet_U'] = inlet_data
             metadata['cases'].append({'name': case.name, 'key': case_key, 'mesh': mesh_key,
-                                      'time': time.name, 'U_in': speed})
+                                      'time': time.name, **summary})
             added += 1
         if not args.append or added:
             arrays['metadata'] = metadata_array(metadata)
