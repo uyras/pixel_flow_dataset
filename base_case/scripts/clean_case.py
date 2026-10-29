@@ -14,6 +14,7 @@ if not (case/'case_summary.json').is_file():
     parser.error('Refusing to clean a directory without case_summary.json')
 paths = [case/'constant/polyMesh', case/'run_status.json']
 paths += [case/f'log.{cmd}' for cmd in ('blockMesh', 'checkMesh', 'foamRun')]
+paths += [p for pattern in ('slurm-*.out', 'slurm-*.err') for p in case.glob(pattern) if p.is_file()]
 paths += [p for p in case.iterdir() if p.is_dir() and is_time(p.name) and float(p.name) != 0]
 for p in paths:
     if p.is_symlink(): p.unlink()

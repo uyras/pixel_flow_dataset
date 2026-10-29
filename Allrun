@@ -68,7 +68,7 @@ def main():
             if not script.is_file() or not os.access(script, os.X_OK):
                 raise OSError(f'скрипт отсутствует или не является исполняемым: {script}')
             if mode == 'slurm':
-                command = ['sbatch', '--ntasks=1', '--cpus-per-task=1',
+                command = ['sbatch', f'--job-name={case.name}', '--ntasks=1', '--cpus-per-task=1',
                            f'--chdir={case}', '--output=slurm-%j.out',
                            '--error=slurm-%j.err', *options,
                            f'--wrap=exec {shlex.quote(str(script))}']

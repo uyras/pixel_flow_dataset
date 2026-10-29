@@ -1,2 +1,4 @@
 cases
 .venv
+*.pyc
+.vscode
