@@ -76,7 +76,27 @@ The dataset is a compressed NPZ archive that can be read with `numpy.load(..., a
 - `key`: prefix for the case's array keys.
 - `mesh`: key of the cell-centre array.
 - `time`: result time.
-- `U_in`: peak inlet speed.
+- `U_in`: peak inlet speed, m/s.
+
+The remaining fields come from each case's `case_summary.json`:
+
+| Field | Meaning |
+| --- | --- |
+| `solid_mask` | An `L × L` matrix describing the body inside a 1 × 1 m region: `1` is a solid square and `0` is fluid. The first row is the bottom row; rows run bottom to top and entries left to right. |
+| `cells_per_meter` | Requested mesh density in cells per metre along x and y. With the `round_up` policy, the actual density may be higher. |
+| `p_residual` | Threshold for the initial normalized pressure `p` residual used to check convergence. |
+| `U_residual` | Threshold for the initial normalized residual of each solved velocity `U` component used to check convergence. |
+| `L` | Number of squares along each side of the body region; each square has a side length of `1/L` m. |
+| `rho` | Constant fluid density, kg/m³. Multiply kinematic pressure `p` by `rho` to obtain pressure in Pa. |
+| `nu` | Kinematic fluid viscosity, m²/s. |
+| `blocks` | Number of OpenFOAM mesh blocks making up the fluid domain. |
+| `cells` | Total number of computational cells across all mesh blocks. |
+| `fluid_regions` | Number of connected fluid regions; regions connect across shared sides, not just corners. |
+| `closed_cavities` | Number of connected fluid regions that do not connect to the channel inlet or outlet. |
+| `solid_area_m2` | Area of the solid portion in the x–y plane, m²: the sum of the mask entries divided by `L²`. |
+| `Re_1m` | Dimensionless Reynolds number using a length of 1 m and peak inlet speed: `U_in × 1 m / nu`. |
+
+These fields are added automatically for new cases. Older datasets may lack them until the enrichment script is run.
 
 The field and cell-centre arrays are `float64`:
 
