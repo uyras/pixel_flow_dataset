@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520">
+<rect width="880" height="520" fill="white"/>
+<text x="40" y="30" font-family="sans-serif" font-size="20">OpenFOAM 14 — mask and channel</text>
+<rect x="40" y="60" width="800" height="400" fill="#eaf5ff" stroke="#132b42" stroke-width="2"/>
+<rect x="240.0" y="310.0" width="50.0" height="50.0" fill="#364152" stroke="#8695a4" stroke-width="0.7"/>
+<text x="265.0" y="339.0" text-anchor="middle" fill="white" font-family="monospace" font-size="11">0,0</text>
+<rect x="290.0" y="310.0" width="50.0" height="50.0" fill="#eaf5ff" stroke="#8695a4" stroke-width="0.7"/>
+<text x="315.0" y="339.0" text-anchor="middle" fill="#132b42" font-family="monospace" font-size="11">1,0</text>
+<rect x="340.0" y="310.0" width="50.0" height="50.0" fill="#eaf5ff" stroke="#8695a4" stroke-width="0.7"/>
+<text x="365.0" y="339.0" text-anchor="middle" fill="#132b42" font-family="monospace" font-size="11">2,0</text>
+<rect x="390.0" y="310.0" width="50.0" height="50.0" fill="#364152" stroke="#8695a4" stroke-width="0.7"/>
+<text x="415.0" y="339.0" text-anchor="middle" fill="white" font-family="monospace" font-size="11">3,0</text>
+<rect x="240.0" y="260.0" width="50.0" height="50.0" fill="#eaf5ff" stroke="#8695a4" stroke-width="0.7"/>
+<text x="265.0" y="289.0" text-anchor="middle" fill="#132b42" font-family="monospace" font-size="11">0,1</text>
+<rect x="290.0" y="260.0" width="50.0" height="50.0" fill="#364152" stroke="#8695a4" stroke-width="0.7"/>
+<text x="315.0" y="289.0" text-anchor="middle" fill="white" font-family="monospace" font-size="11">1,1</text>
+<rect x="340.0" y="260.0" width="50.0" height="50.0" fill="#364152" stroke="#8695a4" stroke-width="0.7"/>
+<text x="365.0" y="289.0" text-anchor="middle" fill="white" font-family="monospace" font-size="11">2,1</text>
+<rect x="390.0" y="260.0" width="50.0" height="50.0" fill="#eaf5ff" stroke="#8695a4" stroke-width="0.7"/>
+<text x="415.0" y="289.0" text-anchor="middle" fill="#132b42" font-family="monospace" font-size="11">3,1</text>
+<rect x="240.0" y="210.0" width="50.0" height="50.0" fill="#eaf5ff" stroke="#8695a4" stroke-width="0.7"/>
+<text x="265.0" y="239.0" text-anchor="middle" fill="#132b42" font-family="monospace" font-size="11">0,2</text>
+<rect x="290.0" y="210.0" width="50.0" height="50.0" fill="#364152" stroke="#8695a4" stroke-width="0.7"/>
+<text x="315.0" y="239.0" text-anchor="middle" fill="white" font-family="monospace" font-size="11">1,2</text>
+<rect x="340.0" y="210.0" width="50.0" height="50.0" fill="#364152" stroke="#8695a4" stroke-width="0.7"/>
+<text x="365.0" y="239.0" text-anchor="middle" fill="white" font-family="monospace" font-size="11">2,2</text>
+<rect x="390.0" y="210.0" width="50.0" height="50.0" fill="#eaf5ff" stroke="#8695a4" stroke-width="0.7"/>
+<text x="415.0" y="239.0" text-anchor="middle" fill="#132b42" font-family="monospace" font-size="11">3,2</text>
+<rect x="240.0" y="160.0" width="50.0" height="50.0" fill="#364152" stroke="#8695a4" stroke-width="0.7"/>
+<text x="265.0" y="189.0" text-anchor="middle" fill="white" font-family="monospace" font-size="11">0,3</text>
+<rect x="290.0" y="160.0" width="50.0" height="50.0" fill="#eaf5ff" stroke="#8695a4" stroke-width="0.7"/>
+<text x="315.0" y="189.0" text-anchor="middle" fill="#132b42" font-family="monospace" font-size="11">1,3</text>
+<rect x="340.0" y="160.0" width="50.0" height="50.0" fill="#eaf5ff" stroke="#8695a4" stroke-width="0.7"/>
+<text x="365.0" y="189.0" text-anchor="middle" fill="#132b42" font-family="monospace" font-size="11">2,3</text>
+<rect x="390.0" y="160.0" width="50.0" height="50.0" fill="#364152" stroke="#8695a4" stroke-width="0.7"/>
+<text x="415.0" y="189.0" text-anchor="middle" fill="white" font-family="monospace" font-size="11">3,3</text>
+<circle cx="240" cy="260" r="4" fill="#d1495b"/>
+<text x="248" y="254" font-family="sans-serif" font-size="14">(0,0)</text>
+<text x="40" y="490" font-family="sans-serif" font-size="14">x: -1 to 3 m; y: -1 to 1 m; z: 0 to 0.01 m. Dark = solid, pale = fluid.</text>
+</svg>

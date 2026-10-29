@@ -2,9 +2,17 @@
 
 English | [Русский](README_RU.md)
 
+This repository contains code to generate cases, simulate flow with OpenFOAM, and assemble a dataset for training a neural network.
+
 ## Base case
 
 [base_case](base_case/) models steady, two-dimensional incompressible laminar flow through a channel using OpenFOAM Foundation 14. A square region inside the channel is divided into an `L` × `L` grid; `solid_mask` determines which squares are solid and which contain fluid. The inlet has a parabolic velocity profile whose maximum is `U_in`.
+
+The example below shows the `L4_diagonals_both_U1` case: the channel and solid geometry, followed by the computed velocity components `u_x` and `u_y` and kinematic pressure `p` at time 1675. Solid regions are shown in dark on the field plots.
+
+![Example case geometry](docs/images/example_geometry.svg)
+
+![Example case velocity and pressure fields](docs/images/example_fields.png)
 
 Edit [parameters.json](base_case/parameters.json) to set the geometry, flow properties, mesh resolution, and convergence limits. The case generator uses these parameters to write the mesh and solver dictionaries, initial fields, and a geometry preview. To run the case, activate OpenFOAM Foundation 14 and execute:
 
@@ -58,4 +66,23 @@ Run `python3 case_status.py` for a quick summary, or pass a case directory as an
 
 Activate an environment with NumPy and OpenFOAM Foundation 14, then run `python3 collect_dataset.py --output results.npz` to create a compressed NPZ dataset. Run the same command with `--append` to add newly completed cases from the same source directory without changing existing entries. Append loads the arrays into memory, rewrites the archive to a temporary file and replaces it. Pass a case directory as the first argument; the default is `output` in `dataset_settings.json`. A case is complete when both status flags `converged` and `only_one_result_time` are true. Errors in completed cases are reported and cause a nonzero exit code, while other cases are still processed. OpenFOAM fields must be ASCII. `foamPostProcess` calculates cell centres in a temporary copy of each case.
 
-Load the file with `numpy.load(..., allow_pickle=False)`. The `metadata` uint8 array contains UTF-8 JSON, with a `cases` list holding each case's `name`, array prefix `key`, mesh reference `mesh`, final `time` and peak inlet speed `U_in`. Arrays `<key>/p`, `<key>/U`, `<key>/inlet_U` and the array named by `mesh` contain pressure, cell velocity, inlet face velocity and cell centres, respectively. Their shapes are `(cell_count,)`, `(cell_count, 3)`, `(inlet_count, 3)` and `(cell_count, 3)`; all are float64 in OpenFOAM order. Identical arrays of cell centres are shared. See the Russian README for a NumPy reading example.
+## Dataset structure
+
+The dataset is a compressed NPZ archive that can be read with `numpy.load(..., allow_pickle=False)`. The `metadata` array contains UTF-8 JSON as `uint8`. Each object in the metadata's `cases` list describes one case:
+
+- `name`: case name.
+- `key`: prefix for the case's array keys.
+- `mesh`: key of the cell-centre array.
+- `time`: result time.
+- `U_in`: peak inlet speed.
+
+The field and cell-centre arrays are `float64`:
+
+| Key | Contents | Shape |
+| --- | --- | --- |
+| `<key>/p` | Cell pressure | `(cell_count,)` |
+| `<key>/U` | Cell velocity | `(cell_count, 3)` |
+| `<key>/inlet_U` | Inlet face velocity | `(inlet_count, 3)` |
+| Value of `mesh` | Cell-centre coordinates | `(cell_count, 3)` |
+
+Cell order matches between the fields and centres; inlet faces follow OpenFOAM order. Identical cell-centre arrays are stored once. See the [Russian README](README_RU.md#структура-датасета) for a NumPy reading example.
